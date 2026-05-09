@@ -7,7 +7,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/js/app.js'
+                'resources/js/app.js',
             ],
             refresh: true,
         }),
@@ -17,11 +17,5 @@ export default defineConfig({
     build: {
         outDir: 'public/build',
         emptyOutDir: true,
-    },
-
-    server: {
-        watch: {
-            ignored: ['**/storage/framework/views/**'],
-        },
     },
 });
