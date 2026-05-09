@@ -1,7 +1,7 @@
 FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
-    zip unzip git curl libzip-dev nodejs npm \
+    git curl zip unzip libzip-dev nodejs npm \
     && docker-php-ext-install zip pdo pdo_mysql
 
 WORKDIR /var/www/html
@@ -13,11 +13,14 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN npm install && npm run build
+RUN npm install
+
+RUN npm run build
+
+RUN ls -la public/build
 
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache
 
 RUN a2enmod rewrite
 
