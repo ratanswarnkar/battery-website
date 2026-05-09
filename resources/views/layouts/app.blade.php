@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'BatteryCo')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+<link rel="stylesheet" href="/build/assets/app-DpkQ59ay.css">
+<script type="module" src="/build/assets/app-5FogMBa5.js"></script>
 </head>
 <body class="site-shell bg-[#050816] text-slate-100 antialiased">
     <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">

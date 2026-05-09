@@ -17,7 +17,7 @@ RUN npm install
 
 RUN npm run build
 
-RUN ls -la public/build
+RUN test -f public/build/manifest.json
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
