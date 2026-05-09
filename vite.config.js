@@ -5,11 +5,20 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js'
+            ],
             refresh: true,
         }),
         tailwindcss(),
     ],
+
+    build: {
+        outDir: 'public/build',
+        emptyOutDir: true,
+    },
+
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
