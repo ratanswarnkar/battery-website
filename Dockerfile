@@ -13,7 +13,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN npm install
+RUN rm -rf node_modules package-lock.json && npm install
 
 RUN npm run build
 
