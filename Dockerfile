@@ -19,7 +19,11 @@ RUN npm run build
 
 RUN test -f public/build/manifest.json
 
-RUN chown -R www-data:www-data /var/www/html \
+RUN mkdir -p storage/framework/sessions \
+    storage/framework/views \
+    storage/framework/cache \
+    bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 
 RUN a2enmod rewrite
