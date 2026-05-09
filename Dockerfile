@@ -1,35 +1,31 @@
 FROM php:8.2-apache
 
-# Install dependencies
 RUN apt-get update && apt-get install -y \
-    zip unzip curl git libzip-dev && \
-    docker-php-ext-install zip pdo pdo_mysql
+    zip unzip git curl libzip-dev nodejs npm \
+    && docker-php-ext-install zip pdo pdo_mysql
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
-
-# Copy Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Set working directory
 WORKDIR /var/www/html
 
-# Copy all project files
 COPY . .
 
-# Set Apache DocumentRoot to /var/www/html/public
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
 
-# Install dependencies if composer.json exists
-RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader; fi
+RUN composer install --no-dev --optimize-autoloader
 
-# 🧩 Fix permissions for Laravel
-RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN npm install && npm run build
 
-# Expose port 80
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache
+
+RUN a2enmod rewrite
+
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+    /etc/apache2/sites-available/*.conf
+
 EXPOSE 80
 
-# Start Apache
 CMD ["apache2-foreground"]
