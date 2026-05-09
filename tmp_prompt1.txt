@@ -1,0 +1,11 @@
+Use case: product-mockup
+Asset type: product catalog image
+Primary request: ultra realistic product render of a premium automotive battery for ecommerce, glossy black casing, metallic terminals, soft studio lighting, isolated product on refined dark background
+Scene/backdrop: dark graphite studio backdrop with subtle gradient
+Subject: modern automotive battery product shot
+Style/medium: ultra realistic 3D product render
+Composition/framing: centered product, vertical crop, clean catalog composition
+Lighting/mood: soft studio lighting with realistic reflections and shadow
+Color palette: black, graphite, steel, electric blue accents
+Materials/textures: glossy shell, brushed metal, premium finish
+Constraints: no logos, no text, no watermark

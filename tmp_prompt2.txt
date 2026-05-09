@@ -1,0 +1,11 @@
+Use case: product-mockup
+Asset type: product catalog image
+Primary request: ultra realistic product render of a premium inverter battery for ecommerce, tall battery unit with glossy body, subtle energy accents, soft studio lighting
+Scene/backdrop: dark blue-black studio backdrop with subtle gradient
+Subject: modern inverter battery product shot
+Style/medium: ultra realistic 3D product render
+Composition/framing: centered product, vertical crop, clean catalog composition
+Lighting/mood: soft studio lighting with realistic reflections and grounded shadow
+Color palette: black, graphite, steel, amber-blue accent lighting
+Materials/textures: glossy shell, brushed metal, premium finish
+Constraints: no logos, no text, no watermark
