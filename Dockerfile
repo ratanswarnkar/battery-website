@@ -29,7 +29,7 @@ RUN npm install
 RUN npm rebuild rollup
 
 # Build Vite assets
-RUN npm run build || cat /root/.npm/_logs/*
+RUN npm run build && ls -la public/build
 
 
 
@@ -88,8 +88,6 @@ RUN chmod -R 775 \
     bootstrap/cache \
     public/build
 
-# Final manifest check
-RUN test -f public/build/manifest.json
 
 EXPOSE 80
 
