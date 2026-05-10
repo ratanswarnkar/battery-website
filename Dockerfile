@@ -5,7 +5,7 @@ FROM composer:2 AS vendor
 
 WORKDIR /app
 
-COPY composer.json composer.lock ./
+COPY . .
 
 RUN composer install \
     --no-dev \
@@ -14,10 +14,6 @@ RUN composer install \
     --prefer-dist \
     --optimize-autoloader
 
-COPY . .
-
-RUN composer dump-autoload --optimize
-
 # =========================
 # Frontend Assets Build
 # =========================
@@ -25,28 +21,17 @@ FROM node:22-bookworm-slim AS assets
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-
-# Clean install to avoid rollup optional dependency issue
-RUN rm -rf node_modules package-lock.json
+COPY . .
 
 RUN npm install
 
-# Force rebuild for Linux container
+# Fix Rollup Linux optional dependency
 RUN npm rebuild rollup
 
-COPY vite.config.js ./
-COPY tailwind.config.js ./
-
-
-COPY resources ./resources
-COPY public ./public
-
-# Build frontend assets
+# Build Vite assets
 RUN npm run build
 
-# Ensure build files exist
-RUN ls -la public/build
+# Verify build output
 RUN test -f public/build/manifest.json
 
 # =========================
@@ -80,12 +65,12 @@ COPY --from=vendor /app ./
 # Copy built assets
 COPY --from=assets /app/public/build ./public/build
 
-# Apache Config
+# Apache public root
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf \
     /etc/apache2/apache2.conf
 
-# Create Laravel required folders
+# Laravel folders
 RUN mkdir -p \
     storage/framework/cache/data \
     storage/framework/sessions \
@@ -104,7 +89,7 @@ RUN chmod -R 775 \
     bootstrap/cache \
     public/build
 
-# Final check
+# Final manifest check
 RUN test -f public/build/manifest.json
 
 EXPOSE 80
