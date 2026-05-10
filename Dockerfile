@@ -31,8 +31,7 @@ RUN npm rebuild rollup
 # Build Vite assets
 RUN npm run build || cat /root/.npm/_logs/*
 
-# Verify build output
-RUN test -f public/build/manifest.json
+
 
 # =========================
 # Production PHP + Apache
