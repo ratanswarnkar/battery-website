@@ -17,6 +17,8 @@ RUN rm -rf node_modules package-lock.json && npm install
 
 RUN npm run build
 
+RUN ls -la public/build/assets
+
 RUN test -f public/build/manifest.json
 
 RUN mkdir -p storage/framework/sessions \
