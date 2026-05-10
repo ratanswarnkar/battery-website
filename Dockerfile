@@ -29,7 +29,7 @@ RUN npm install
 RUN npm rebuild rollup
 
 # Build Vite assets
-RUN npm run build && ls -la public/build
+RUN npm run build || (cat /root/.npm/_logs/* && exit 1)
 
 
 
