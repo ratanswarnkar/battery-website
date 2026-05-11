@@ -17,30 +17,28 @@ RUN composer install \
 # =========================
 # Frontend Assets Build
 # =========================
-FROM node:22-bookworm-slim AS assets
+FROM node:20-bullseye-slim AS assets
 
 WORKDIR /app
 
-COPY . .
+COPY package*.json ./
 
 RUN npm install
 
-# Fix Rollup Linux optional dependency
-RUN npm rebuild rollup
+COPY . .
+
+# Clean old builds
+RUN rm -rf public/build
 
 # Build Vite assets
-RUN npm run build || (cat /root/.npm/_logs/* && exit 1)
-
-
+RUN npm run build
 
 # =========================
 # Production PHP + Apache
 # =========================
-FROM php:8.3-apache AS production
+FROM php:8.3-apache
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public \
-    APP_ENV=production \
-    APP_DEBUG=false
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
 RUN apt-get update && apt-get install -y \
     unzip \
@@ -58,13 +56,13 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /var/www/html
 
-# Copy Laravel app
+# Copy app
 COPY --from=vendor /app ./
 
-# Copy built assets
+# Copy Vite build assets
 COPY --from=assets /app/public/build ./public/build
 
-# Apache public root
+# Apache public root fix
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf \
     /etc/apache2/apache2.conf
@@ -78,16 +76,9 @@ RUN mkdir -p \
     bootstrap/cache
 
 # Permissions
-RUN chown -R www-data:www-data \
-    storage \
-    bootstrap/cache \
-    public/build
+RUN chown -R www-data:www-data storage bootstrap/cache public/build
 
-RUN chmod -R 775 \
-    storage \
-    bootstrap/cache \
-    public/build
-
+RUN chmod -R 775 storage bootstrap/cache public/build
 
 EXPOSE 80
 
